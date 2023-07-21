@@ -1,18 +1,27 @@
-'use client'
+'use client';
+
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import { 
-    FieldValues, 
-    SubmitHandler, 
-    useForm
-  } from 'react-hook-form';
+  FieldValues, 
+  SubmitHandler, 
+  useForm
+} from 'react-hook-form';
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from "react";
+
 import useRentModal from '@/app/hooks/useRentModal';
+
 import Modal from "./Modal";
+
+import CategoryInput from '../inputs/CategoryInput';
+import CountrySelect from "../inputs/CountrySelect";
 import { categories } from '../navbar/Categories';
+
 import Input from '../inputs/Input';
 import Heading from '../Heading';
-import CategoryInput from '../inputs/CategoryInput';
+import CitySelect from '../inputs/CitySelect';
 enum STEPS {
     CATEGORY = 0,
     LOCATION = 1,
@@ -25,7 +34,7 @@ const RentModal = () => {
     const rentModal = useRentModal();
     const [step, setStep] = useState(STEPS.CATEGORY);
     const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
-
+    let newCategories;
     const { 
         register, 
         handleSubmit,
@@ -50,6 +59,10 @@ const RentModal = () => {
       });
        
     const category = watch('category');
+    const location = watch('location');
+    const Map = useMemo(() => dynamic(() => import('../Map'), { 
+      ssr: false 
+    }), [location]);
     const setCustomValue = (id: string, value: any) => {
           setValue(id, value, {
           shouldDirty: true,
@@ -64,7 +77,6 @@ const RentModal = () => {
         setStep((value) => value + 1);
     }
     const handleCategoryClick = (category: string) => {
-        let newCategories;
         
         if (categoriesSelected.includes(category)) {
           newCategories = categoriesSelected.filter(cat => cat !== category);
@@ -73,7 +85,8 @@ const RentModal = () => {
         }
         
         setCategoriesSelected(newCategories);
-        setCustomValue('category', newCategories); // changed 'categories' to 'category'
+        setCustomValue('category', newCategories); 
+        console.log(newCategories);
       }
     const actionLabel = useMemo(() => {
         if (step === STEPS.PRICE) {
@@ -113,11 +126,27 @@ const RentModal = () => {
                     label={item.label}
                     icon={item.icon}
                 />
+
               </div>
             ))}
           </div>
         </div>
       )
+      if (step === STEPS.LOCATION) {
+        bodyContent = (
+          <div className="flex flex-col gap-8">
+            <Heading
+              title="Where is your place located?"
+              subtitle="Help tenants find you!"
+            />
+            <CitySelect 
+              value = {location}
+              onChange={(value) => setCustomValue('location', value)} 
+            />
+             <Map center={location?.latlng} />
+          </div>
+        );
+      }
     return ( 
      <Modal
       isOpen={rentModal.isOpen}
@@ -125,7 +154,7 @@ const RentModal = () => {
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      onSubmit={rentModal.onClose}
+      onSubmit={onNext}
       onClose={rentModal.onClose}
       body = {bodyContent}
     />
