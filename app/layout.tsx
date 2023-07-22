@@ -12,8 +12,8 @@ import RentModal from './components/modals/RentModal'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Student Housing',
-  description: 'Student Rental app',
+  title: 'Easy Housing',
+  description: 'Easy Housing app',
 }
 const font = Nunito({
   subsets: ["latin"],

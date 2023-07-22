@@ -110,7 +110,7 @@ const LoginModal = () => {
       />
       <div className="
       text-neutral-500 text-center mt-4 font-light">
-        <p>First time using Student Housing?
+        <p>First time using Easy Housing?
           <span 
             onClick={onToggle} 
             className="

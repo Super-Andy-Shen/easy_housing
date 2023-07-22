@@ -21,7 +21,6 @@ model User{
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   favoriteIds String[] @db.ObjectId
-
   accounts Account[]
   listings Listing[]
   reservations Reservation[]
@@ -53,13 +52,13 @@ model Listing {
   imageSrc String
   createdAt DateTime @default(now())
   category  String
+  categories String[]
   roomCount Int
   bathroomCount Int
   guestCount Int
   locationValue String
   userId String @db.ObjectId
   price Int
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
 }

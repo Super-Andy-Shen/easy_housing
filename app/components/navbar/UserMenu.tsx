@@ -49,7 +49,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                      cursor-pointer
                    "
                  >
-                    Student Housing Expert
+                    List My Properties
                  </div>
                  <div
                     onClick={toggleOpen}
@@ -107,7 +107,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                   />
                   <MenuItem  
                     onClick ={rentModal.onOpen}
-                    label = "Student Housing Expert"
+                    label = "List My Properties"
                   />
                   <hr/>
                   <MenuItem  
